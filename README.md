@@ -19,47 +19,43 @@ Frida's [releases](https://github.com/frida/frida/releases) page on GitHub.
 
 ## 2. Build your own binaries
 
-### Dependencies
+Run:
+
+    make
+
+You may also invoke `./configure` first if you want to specify a `--prefix`, or
+any other options.
+
+### CLI tools
 
 For running the Frida CLI tools, e.g. `frida`, `frida-ls-devices`, `frida-ps`,
-`frida-kill`, `frida-trace`, `frida-discover`, etc., you need Python plus a
-few packages:
+`frida-kill`, `frida-trace`, `frida-discover`, etc., you need a few packages:
 
-    pip install colorama prompt-toolkit pygments
+    pip install colorama prompt-toolkit pygments websockets
 
-### Linux
+### Apple OSes
 
+First make a trusted code-signing certificate. If you have already used Xcode
+before, chances are you already have an Apple development certificate.
+You can check it with the following command:
+
+    security find-identity -v -p codesigning
+
+Which will return the certificate in the following format:
+
+    1) XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX "Apple Development: user@mail.com (YYYYYYYYYY)"
+
+If you do not have a certificate, follow this guide: 
+https://help.apple.com/xcode/mac/current/#/dev154b28f09.
+
+Next export the name of your certificate to relevant environment
+variables, and run `make`:
+
+    export MACOS_CERTID=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    export IOS_CERTID=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    export WATCHOS_CERTID=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    export TVOS_CERTID=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     make
-
-### macOS and iOS
-
-First make a trusted code-signing certificate. You can use the guide at
-https://sourceware.org/gdb/wiki/PermissionsDarwin in the sections
-“Create a certificate in the System Keychain” and “Trust the certificate
-for code signing”. You can use the name `frida-cert` instead of `gdb-cert`
-if you'd like.
-
-Next export the name of the created certificate to the environment variables
-`MACOS_CERTID` and `IOS_CERTID`, and run `make`:
-
-    export MACOS_CERTID=frida-cert
-    export IOS_CERTID=frida-cert
-    make
-
-To ensure that macOS accepts the newly created certificate, restart the
-`taskgated` daemon:
-
-    sudo killall taskgated
-
-### Windows
-
-    frida.sln
-
-(Requires Visual Studio >= 2019. Edit `releng\frida-toolchain.props` for
-versions above 2019.)
-
-See [https://frida.re/docs/building/](https://frida.re/docs/building/)
-for details.
 
 ## Learn more
 
